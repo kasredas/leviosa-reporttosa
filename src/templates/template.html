@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Report</title>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: #ECF0F1;
+    }
+    .white-bg {
+      background-color: white;
+    }
+    td.is-wrap {
+      white-space: normal;
+      word-break: break-word;
+    }
+    .passed {
+      border-left: 5px solid #4DB6AC;
+    }
+    .passed-status {
+      background-color: #4DB6AC;
+      color: white !important;
+    }
+    .failed {
+      border-left: 5px solid #E57373;
+    }
+    .failed-status {
+      background-color: #E57373;
+      color: white !important;
+    }
+    .failed-status:hover {
+      background-color: #E57373 !important;
+    }
+    pre {
+      width: 100%;
+      background-color: #7e7e7e7e;
+      white-space: pre-line;
+      padding: 5px;
+    }
+    .status {
+      cursor: pointer;
+      min-width: 100px;
+    }
+    tr:hover {
+      background-color: #CFD8DC !important;
+    }
+    thead tr:hover {
+      background-color: white !important;
+    }
+    .Skipped {
+      border-left: 5px solid #FFD54F;
+    }
+    .Skipped-status {
+      background-color: #FFD54F;
+      color: white !important;
+    }
+    .Skipped-status:hover {
+      background-color: #FFD54F !important;
+    }
+    .loader {
+      display: none;
+    }
+    .is-break-word-on-overflow {
+      overflow-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col s12 z-depth-2 white-bg">
+        <h3 class="center-align">Report</h3>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="row">
+    </div>
+    <div class="col s12 z-depth-2 white-bg">
+      <div id="loader" class="progress loader">
+        <div class="indeterminate"></div>
+      </div>
+      <table id="myTable" class="table highlight responsive-table">
+        <thead>
+          <tr>
+            <th class="center-align status" onclick="sortTable(0)">
+              <a class="waves-effect waves-light"><i class="material-icons right">unfold_less</i>Status</a>
+            </th>
+            <th class="center-align status" onclick="sortTable(1)">
+              <a class="waves-effect waves-light"><i class="material-icons right">unfold_less</i>Name</a>
+            </th>
+            <th class="center-align status" onclick="sortTable(2)"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{reportBlocks}}
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <h3></h3>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems);
+    });
+  </script>
+  <script>
+    let sortDirection = 1;
+    function sortTable(column) {
+      const table = document.getElementById("myTable");
+      const tbody = table.tBodies[0];
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const loader = document.getElementById("loader");
+      loader.style.display = "block"; // Show the loader
+      setTimeout(() => {
+        rows.sort((a, b) => {
+          const aValue = a.cells[column].textContent.trim();
+          const bValue = b.cells[column].textContent.trim();
+          return aValue.localeCompare(bValue, undefined, { numeric: true }) * sortDirection;
+        });
+        sortDirection *= -1; // Toggle sort direction
+        // Clear table body
+        while (tbody.firstChild) {
+          tbody.removeChild(tbody.firstChild);
+        }
+        // Append sorted rows back to table body
+        rows.forEach((row) => {
+          tbody.appendChild(row);
+        });
+        loader.style.display = "none"; // Hide the loader
+      }, 1000); // Simulate sorting delay of 1 second
+    }
+  </script>
+</body>
+</html>
