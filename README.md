@@ -1,7 +1,11 @@
+
+
+![Alt text](/screenshot.png?raw=true "Optional Title")
+
 # Setup
+Add to `wdio.conf.ts`
 
-add to `wdio.conf.ts`
-
+### Start using reporter:
 ```
   reporters: [
    [
@@ -13,29 +17,60 @@ add to `wdio.conf.ts`
  ],
 ```
 
+
+### Add config  for screenshots on test failure:
+
 ```
 
-beforeTest: async function (test, context) {
-const screenshotsDir = join(
-'./reports',
-process.env.TIMESTAMP || '',
-'screenshots'
-);
+  beforeTest: async () => {
+    const browser: Browser = global.browser;
+    mkdirSync(SCREENSHOT_DIR, { recursive: true });
+  },
 
-    mkdirSync(screenshotsDir, { recursive: true });
+  afterTest: async function (test, context, { error, passed }) {
+    if (!passed) {
+      console.log('Test failed, taking screenshot');
+      try {
+        const testName = test.title.replace(/[^a-zA-Z0-9]/g, '_');
+        const timestamp = process.env.TIMESTAMP;
+        const screenshotPath = join(
+          process.cwd(),
+          'reports',
+          `${timestamp}`,
+          'screenshots',
+          `${testName}.png`
+        );
 
-},
-
-afterTest: async function (test, { passed }) {
-if (!passed) {
-const timestamp = process.env.TIMESTAMP;
-const testName = test.title.replace(/\s/g, '\_');
-const screenshotPath = `./reports/${timestamp}/screenshots/${testName}.png`;
-
-      await driver.saveScreenshot(screenshotPath);
+        const browser: Browser = global.browser;
+        await browser.saveScreenshot(screenshotPath);
+      } catch (err) {
+        console.error('Failed to take screenshot:', err);
+      }
     }
-
-},
+  },
 
 ```
 
+
+# Result
+CLI will print this message:
+
+```
+ === Test Execution Summary ===
+ -----------------------------
+ 1. Lorem ipsum test
+    Status: failed
+ 
+ === Summary Statistics ===
+ ------------------------
+ Total Tests: 1
+ Passed: 0
+ Failed: 1
+ Skipped: 0
+ Pending: 0
+ ------------------------
+ 
+ Combined HTML report generated at: /<your_project_path>/reports/<TIMESTAMP>/test-result.html
+```
+
+Alongside  generated html file that should look like one in screenshot
