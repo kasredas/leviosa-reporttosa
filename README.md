@@ -3,7 +3,7 @@
 ![Alt text](/screenshot.png?raw=true "Optional Title")
 
 # Setup
-add to `wdio.conf.ts`
+Add to `wdio.conf.ts`
 
 ### Start using reporter:
 ```
@@ -25,7 +25,6 @@ add to `wdio.conf.ts`
   beforeTest: async () => {
     const browser: Browser = global.browser;
     mkdirSync(SCREENSHOT_DIR, { recursive: true });
-    await browser.setWindowSize(1920, 1080);
   },
 
   afterTest: async function (test, context, { error, passed }) {
@@ -52,3 +51,26 @@ add to `wdio.conf.ts`
 
 ```
 
+
+# Result
+CLI will print this message:
+
+```
+ === Test Execution Summary ===
+ -----------------------------
+ 1. Lorem ipsum test
+    Status: failed
+ 
+ === Summary Statistics ===
+ ------------------------
+ Total Tests: 1
+ Passed: 0
+ Failed: 1
+ Skipped: 0
+ Pending: 0
+ ------------------------
+ 
+ Combined HTML report generated at: /<your_project_path>/reports/<TIMESTAMP>/test-result.html
+```
+
+Alongside  generated html file that should look like one in screenshot
