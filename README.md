@@ -1,6 +1,6 @@
 
 
-![Alt text](/screenshot.png?raw=true "Optional Title")
+![Report screenshot](https://github.com/kasredas/leviosa-reporttosa/raw/main/screenshot.png?raw=true "Report screenshot")
 
 # Setup
 Add to `wdio.conf.ts`
